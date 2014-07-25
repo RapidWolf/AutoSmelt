@@ -1,0 +1,42 @@
+package AutoSmelt;
+
+import java.util.Random;
+
+import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class AutoSmelt extends JavaPlugin implements Listener {
+
+	public void onMine(BlockBreakEvent e) { 
+		Player p = e.getPlayer();
+		if(e.getBlock().getType().equals(Material.IRON_ORE)) { 
+			this.giveItems(p, Material.IRON_INGOT);
+			if(e.getBlock().getType().equals(Material.GOLD_ORE)) { 
+				this.giveItems(p, Material.GOLD_INGOT); 
+		}
+		}
+		
+	}
+
+		public void giveItems(Player p, Material material) { 
+			ItemStack item = p.getItemInHand(); 
+			Random random = new Random(); 
+			int loot = 0;
+			int level = item.getEnchantmentLevel(Enchantment.LOOT_BONUS_BLOCKS);
+			if(level ==1) { 
+				loot = 2;
+				}else if(level == 2) {
+					loot = random.nextInt(1)+2;	
+				}else if(level == 3) {
+					loot = random.nextInt(2)+2;
+					
+				}
+			p.getInventory().addItem(new ItemStack(material, loot)); 
+		}
+}
+
